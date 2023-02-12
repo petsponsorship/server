@@ -1,40 +1,47 @@
-let posts = [
-  {
-    id: "1",
-    text: "Hello",
-    createdAt: Date.now().toString(),
+import { sequelize } from "../db/database.js";
+
+import SQ from "sequelize";
+const DataTypes = SQ.DataTypes;
+const Sequelize = SQ.Sequelize;
+
+export const Post = sequelize.define("post", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true,
   },
-  {
-    id: "2",
-    text: "Hello2",
-    createdAt: Date.now().toString(),
+  text: {
+    type: DataTypes.TEXT,
+    allowNull: false,
   },
-];
+});
 
 export async function getAll() {
-  return posts;
+  return Post.findAll({
+    order: [["createdAt", "DESC"]],
+  });
 }
 
 export async function getById(id) {
-  return posts.find((post) => post.id === id);
+  return Post.findOne({
+    where: { id },
+  });
 }
 
 export async function create(text) {
-  const post = {
-    id: Date.now().toString(),
-    text,
-    createdAt: Date.now().toString(),
-  };
-  posts = [post, ...posts];
-  return posts;
+  return Post.create({ text }).then((data) => getById(data.dataValues.id));
 }
 
 export async function update(id, text) {
-  const post = posts.find((post) => post.id === id);
-  if (post) return (post.text = text);
-  return post;
+  return Post.findByPk(id).then((post) => {
+    post.text = text;
+    return post.save();
+  });
 }
 
 export async function remove(id) {
-  posts = posts.filter((post) => post.id !== id);
+  return Post.findByPk(id).then((post) => {
+    post.destroy();
+  });
 }

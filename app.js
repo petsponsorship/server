@@ -4,6 +4,8 @@ import morgan from "morgan";
 import helmet from "helmet";
 import postsRoute from "./router/posts.js";
 import "express-async-errors";
+import { sequelize } from "./db/database.js";
+import { config } from "./config.js";
 
 const app = express();
 app.use(express.json());
@@ -21,4 +23,7 @@ app.use((error, req, res, next) => {
   console.error(error);
   res.sendStatus(500);
 });
-app.listen(8080);
+
+sequelize.sync().then(() => {
+  app.listen(config.host.port);
+});
