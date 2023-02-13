@@ -8,9 +8,15 @@ import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
 
 const app = express();
+
+const corsOption = {
+  origin: config.cors.allowedOrigin,
+  optionsSuccessStatus: 200,
+};
+
 app.use(express.json());
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOption));
 app.use(morgan("tiny"));
 
 app.use("/posts", postsRoute);
@@ -25,5 +31,6 @@ app.use((error, req, res, next) => {
 });
 
 sequelize.sync().then(() => {
-  app.listen(config.host.port);
+  console.log(`Server is started... ${new Date()}`);
+  app.listen(config.port);
 });
