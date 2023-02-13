@@ -13,8 +13,32 @@ export async function getPost(req, res) {
 }
 
 export async function createPost(req, res) {
-  const { text } = req.body;
-  const posts = await postRepository.create(text);
+  const {
+    species,
+    speciesDetail,
+    etcDetail,
+    sex,
+    name,
+    age,
+    targetAmount,
+    adopt,
+    purpose,
+    thumbnail,
+    content,
+  } = req.body;
+  const posts = await postRepository.create(
+    species,
+    speciesDetail,
+    etcDetail,
+    sex,
+    name,
+    age,
+    targetAmount,
+    adopt,
+    purpose,
+    thumbnail,
+    content
+  );
   res.status(201).json(posts);
 }
 
