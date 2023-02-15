@@ -2,8 +2,12 @@ import * as postRepository from "../data/post.js";
 
 export async function getPosts(req, res) {
   const species = req.query.species;
-  const posts = await postRepository.getAll(species);
-  res.status(200).json(posts);
+  try {
+    const posts = await postRepository.getAll(species);
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export async function getPost(req, res) {
