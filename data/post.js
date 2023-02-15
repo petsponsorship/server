@@ -89,14 +89,20 @@ export const Post = sequelize.define("post", {
     allowNull: false,
     defaultValue: 0,
   },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    defaultValue: 0,
+  },
 });
 
-export async function getAll() {
+export async function getAll(species) {
   return Post.findAll({
     attributes: [
       "id",
       "species",
       "speciesDetail",
+      "name",
       "etcDetail",
       "sex",
       "age",
@@ -106,9 +112,11 @@ export async function getAll() {
       "purpose",
       "thumbnail",
       "sponsor",
+      "userId",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
+    where: species ? { species } : "",
   });
 }
 
@@ -129,7 +137,8 @@ export async function create(
   adopt,
   purpose,
   thumbnail,
-  content
+  content,
+  userId
 ) {
   return Post.create({
     species,
@@ -143,12 +152,34 @@ export async function create(
     purpose,
     thumbnail,
     content,
+    userId,
   }).then((data) => getById(data.dataValues.id));
 }
 
-export async function update(id, text) {
+export async function update(
+  id,
+  species,
+  speciesDetail,
+  etcDetail,
+  sex,
+  name,
+  age,
+  adopt,
+  purpose,
+  thumbnail,
+  content
+) {
   return Post.findByPk(id).then((post) => {
-    post.text = text;
+    post.species = species;
+    post.speciesDetail = speciesDetail;
+    post.etcDetail = etcDetail;
+    post.sex = sex;
+    post.name = name;
+    post.age = age;
+    post.adopt = adopt;
+    post.purpose = purpose;
+    post.thumbnail = thumbnail;
+    post.content = content;
     return post.save();
   });
 }

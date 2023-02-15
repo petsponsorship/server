@@ -21,4 +21,8 @@ export const config = {
   cors: {
     allowedOrigin: required("CORS_ALLOW_ORIGIN"),
   },
+  jwt: {
+    secretKey: required("JWT_SECRET_KEY"),
+    saltRound: required("JWT_SALT"),
+  },
 };

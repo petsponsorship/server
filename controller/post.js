@@ -1,7 +1,8 @@
 import * as postRepository from "../data/post.js";
 
-export async function getPosts(_, res) {
-  const posts = await postRepository.getAll();
+export async function getPosts(req, res) {
+  const species = req.query.species;
+  const posts = await postRepository.getAll(species);
   res.status(200).json(posts);
 }
 
@@ -26,6 +27,7 @@ export async function createPost(req, res) {
     thumbnail,
     content,
   } = req.body;
+  const userId = req.userId;
   const posts = await postRepository.create(
     species,
     speciesDetail,
@@ -37,24 +39,43 @@ export async function createPost(req, res) {
     adopt,
     purpose,
     thumbnail,
-    content
+    content,
+    userId
   );
   res.status(201).json(posts);
 }
 
 export async function updatePost(req, res) {
   const id = req.params.id;
-  const text = req.body.text;
-  const post = await postRepository.update(id, text);
-  if (post) {
-    res.status(200).json(post);
-  } else {
-    res.status(404).json({ message: `post id (${id}) not found` });
-  }
+
+  const { species, speciesDetail, etcDetail, sex, name, age, adopt, purpose, thumbnail, content } =
+    req.body;
+
+  const post = await postRepository.getById(id);
+  if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
+  if (post.userId !== req.userId) return res.sendStatus(403);
+
+  const updated = await postRepository.update(
+    id,
+    species,
+    speciesDetail,
+    etcDetail,
+    sex,
+    name,
+    age,
+    adopt,
+    purpose,
+    thumbnail,
+    content
+  );
+  res.status(200).json(updated);
 }
 
 export async function removePost(req, res) {
   const id = req.params.id;
+  const post = await postRepository.getById(id);
+  if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
+  if (post.userId !== req.userId) return res.sendStatus(403);
   await postRepository.remove(id);
   res.sendStatus(204);
 }

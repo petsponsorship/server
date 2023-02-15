@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
-import postsRoute from "./router/posts.js";
+import postsRouter from "./router/posts.js";
+import authRouter from "./router/auth.js";
 import "express-async-errors";
 import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
@@ -19,7 +20,8 @@ app.use(helmet());
 app.use(cors(corsOption));
 app.use(morgan("tiny"));
 
-app.use("/posts", postsRoute);
+app.use("/posts", postsRouter);
+app.use("/auth", authRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);
