@@ -23,9 +23,7 @@ const vaildateSignup = [
 ];
 
 router.post("/login", validateCredential, authController.login);
-
 router.post("/signup", vaildateSignup, authController.signup);
-
 router.get("/me", isAuth, authController.me);
 
 export default router;

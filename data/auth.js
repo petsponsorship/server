@@ -1,8 +1,12 @@
 import { sequelize } from "../db/database.js";
-
 import SQ from "sequelize";
+import jwt from "jsonwebtoken";
+import { config } from "../config.js";
+
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
+
+const AUTH_ERROR = { message: "Authentication Error" };
 
 export const User = sequelize.define("user", {
   id: {
@@ -47,4 +51,14 @@ export async function findById(id) {
 
 export async function createUser(email, name, phoneNumber, password) {
   return User.create(email, name, phoneNumber, password);
+}
+
+export async function findByToken(authToken) {
+  const token = authToken.split(" ")[1];
+  let userId = "";
+  jwt.verify(token, config.jwt.secretKey, async (error, decoded) => {
+    if (error) return res.status(401).json(AUTH_ERROR);
+    userId = decoded.id;
+  });
+  return userId;
 }
