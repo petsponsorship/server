@@ -1,9 +1,6 @@
 import { findByToken } from "../data/auth.js";
-import { getByPost } from "../data/like.js";
 import * as postRepository from "../data/post.js";
 import * as supportRepository from "../data/support.js";
-
-import { isAuth } from "../middleware/auth.js";
 
 export async function getPosts(req, res) {
   const species = req.query.species;

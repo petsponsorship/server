@@ -113,7 +113,7 @@ export async function getAll(species) {
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
-    where: species ? { species } : "",
+    where: species === "전체" ? "" : { species },
   });
 }
 
