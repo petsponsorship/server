@@ -1,4 +1,5 @@
 import { findByToken } from "../data/auth.js";
+import { getByPost } from "../data/like.js";
 import * as postRepository from "../data/post.js";
 import * as supportRepository from "../data/support.js";
 

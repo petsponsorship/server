@@ -6,8 +6,8 @@ import { User } from "./auth.js";
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
-export const Support = sequelize.define(
-  "support",
+export const Like = sequelize.define(
+  "like",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -15,21 +15,27 @@ export const Support = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-    },
   },
   { timestamps: false }
 );
-Support.belongsTo(Post);
-Support.belongsTo(User);
+Like.belongsTo(Post);
+Like.belongsTo(User);
 
-export async function getById(userId) {
-  return Support.findAll({
+export async function getByPostByUser(postId, userId) {
+  return Like.findOne({
+    where: { postId, userId },
+  });
+}
+
+export async function getByPost(postId) {
+  return Like.findAndCountAll({
+    where: { postId },
+  });
+}
+
+export async function getByUser(userId) {
+  return Like.findAll({
     attributes: [
-      "amount",
       [Sequelize.col("post.id"), "postId"],
       [Sequelize.col("post.species"), "species"],
       [Sequelize.col("post.speciesDetail"), "speciesDetail"],
@@ -44,40 +50,22 @@ export async function getById(userId) {
       [Sequelize.col("post.thumbnail"), "thumbnail"],
       [Sequelize.col("post.sponsor"), "sponsor"],
     ],
-    include: { model: Post, attributes: [] },
     where: { userId },
+    include: { model: Post, attributes: [] },
   });
 }
 
-export async function getByPostById(postId, userId) {
-  return Support.findOne({
-    where: { postId, userId },
-  });
-}
-
-export async function getByPost(postId) {
-  return Support.findAndCountAll({
-    where: { postId },
-  });
-}
-
-export async function create(amount, postId, userId) {
-  const support = await getByPostById(postId, userId);
-  if (support) return update(support, postId, amount);
-  await updateSupport(postId, amount);
-  return Support.create({
-    amount,
+export async function like(postId, userId) {
+  const like = await getByPostByUser(postId, userId);
+  if (like) return unlike(like.dataValues.id);
+  return Like.create({
     postId,
     userId,
   });
 }
 
-export async function update(support, postId, amount) {
-  const id = support.dataValues.id;
-  const prevAmount = support.dataValues.amount;
-  await updateSupport(postId, prevAmount + amount);
-  return Support.findByPk(id).then((support) => {
-    support.amount = prevAmount + amount;
-    return support.save();
+export async function unlike(id) {
+  return Like.findByPk(id).then((like) => {
+    like.destroy();
   });
 }

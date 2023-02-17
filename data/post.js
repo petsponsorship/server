@@ -193,3 +193,17 @@ export async function updateSupport(id, amount) {
     return post.save();
   });
 }
+
+export async function updateLike(id, like) {
+  return Post.findByPk(id).then((post) => {
+    post.like = like;
+    return post.save();
+  });
+}
+
+export async function updateSponsor(id, sponsor) {
+  return Post.findByPk(id).then((post) => {
+    post.sponsor = sponsor;
+    return post.save();
+  });
+}
