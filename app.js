@@ -4,6 +4,8 @@ import morgan from "morgan";
 import helmet from "helmet";
 import postsRouter from "./router/posts.js";
 import authRouter from "./router/auth.js";
+import supportRouter from "./router/support.js";
+import likeRouter from "./router/like.js";
 import "express-async-errors";
 import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
@@ -22,6 +24,8 @@ app.use(morgan("tiny"));
 
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);
+app.use("/support", supportRouter);
+app.use("/like", likeRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);

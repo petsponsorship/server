@@ -1,6 +1,7 @@
 import { sequelize } from "../db/database.js";
 
 import SQ from "sequelize";
+import { User } from "./auth.js";
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
@@ -89,12 +90,8 @@ export const Post = sequelize.define("post", {
     allowNull: false,
     defaultValue: 0,
   },
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: 0,
-  },
 });
+Post.belongsTo(User);
 
 export async function getAll(species) {
   return Post.findAll({
@@ -112,11 +109,11 @@ export async function getAll(species) {
       "purpose",
       "thumbnail",
       "sponsor",
-      "userId",
+      "expired",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
-    where: species ? { species } : "",
+    where: species === "전체" ? "" : { species },
   });
 }
 
@@ -187,5 +184,26 @@ export async function update(
 export async function remove(id) {
   return Post.findByPk(id).then((post) => {
     post.destroy();
+  });
+}
+
+export async function updateSupport(id, amount) {
+  return Post.findByPk(id).then((post) => {
+    post.amount = post.amount + amount;
+    return post.save();
+  });
+}
+
+export async function updateLike(id, like) {
+  return Post.findByPk(id).then((post) => {
+    post.like = like;
+    return post.save();
+  });
+}
+
+export async function updateSponsor(id, sponsor) {
+  return Post.findByPk(id).then((post) => {
+    post.sponsor = sponsor;
+    return post.save();
   });
 }
