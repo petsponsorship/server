@@ -11,10 +11,12 @@ export async function getSupport(req, res) {
 export async function createSupport(req, res) {
   const { postId, amount } = req.body;
   const userId = req.userId;
-  await supportRepository.create(Number(amount), postId, userId);
-  const supportNum = await supportRepository.getByPost(postId);
-  console.log("supportNum :>> ", supportNum);
-  console.log("supportNum.rows.length :>> ", supportNum.rows.length);
-  await updateSponsor(postId, supportNum.rows.length);
-  res.sendStatus(201);
+  try {
+    await supportRepository.create(Number(amount), postId, userId);
+    const supportNum = await supportRepository.getByPost(postId);
+    await updateSponsor(postId, supportNum.rows.length);
+    res.sendStatus(201);
+  } catch (error) {
+    res.status(404).json({ message: `${error}` });
+  }
 }

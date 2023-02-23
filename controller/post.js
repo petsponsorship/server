@@ -4,11 +4,18 @@ import * as supportRepository from "../data/support.js";
 
 export async function getPosts(req, res) {
   const species = req.query.species;
-  const posts = await postRepository.getAll(species);
-  res.status(200).json(posts);
+  const userId = req.query.user;
+  if (userId) {
+    const posts = await postRepository.getAllByUser(userId);
+    res.status(200).json(posts);
+  } else {
+    const posts = await postRepository.getAll(species);
+    res.status(200).json(posts);
+  }
+  postRepository.updateExpired();
 }
 
-export async function getPost(req, res, next) {
+export async function getPost(req, res) {
   const id = req.params.id;
   const post = await postRepository.getById(id);
   const authHeader = req.get("Authorization");
@@ -22,23 +29,11 @@ export async function getPost(req, res, next) {
 }
 
 export async function createPost(req, res) {
-  const {
-    species,
-    speciesDetail,
-    etcDetail,
-    sex,
-    name,
-    age,
-    targetAmount,
-    adopt,
-    purpose,
-    thumbnail,
-    content,
-  } = req.body;
+  const { species, etcDetail, sex, name, age, targetAmount, adopt, purpose, content } = req.body;
   const userId = req.userId;
+  const thumbnail = req.file.location;
   const posts = await postRepository.create(
     species,
-    speciesDetail,
     etcDetail,
     sex,
     name,
@@ -66,7 +61,6 @@ export async function updatePost(req, res) {
   const updated = await postRepository.update(
     id,
     species,
-    speciesDetail,
     etcDetail,
     sex,
     name,

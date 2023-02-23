@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
+import schedule from "node-schedule";
 import postsRouter from "./router/posts.js";
 import authRouter from "./router/auth.js";
 import supportRouter from "./router/support.js";
@@ -9,6 +10,7 @@ import likeRouter from "./router/like.js";
 import "express-async-errors";
 import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
+import { updateExpired } from "./data/post.js";
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors(corsOption));
 app.use(morgan("tiny"));
+
+schedule.scheduleJob("1 1 0 * * *", () => updateExpired());
 
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);

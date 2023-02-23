@@ -25,4 +25,9 @@ export const config = {
     secretKey: required("JWT_SECRET_KEY"),
     saltRound: required("JWT_SALT"),
   },
+  s3: {
+    accessKeyId: required("AWS_ACCESS_KEY"),
+    secretAccessKey: required("AWS_SECRET_KEY"),
+    region: required("AWS_REGION"),
+  },
 };

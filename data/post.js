@@ -1,7 +1,7 @@
-import { sequelize } from "../db/database.js";
-
 import SQ from "sequelize";
+import dayjs from "dayjs";
 import { User } from "./auth.js";
+import { sequelize } from "../db/database.js";
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;
 
@@ -16,10 +16,6 @@ export const Post = sequelize.define("post", {
     type: DataTypes.STRING,
     allowNull: false,
     defaultValue: "etc",
-  },
-  speciesDetail: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
   etcDetail: {
     type: DataTypes.STRING,
@@ -76,7 +72,7 @@ export const Post = sequelize.define("post", {
     defaultValue: "",
   },
   content: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING,
     allowNull: false,
     defaultValue: "",
   },
@@ -84,6 +80,10 @@ export const Post = sequelize.define("post", {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
+  },
+  expiredDesc: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
   like: {
     type: DataTypes.INTEGER,
@@ -98,7 +98,6 @@ export async function getAll(species) {
     attributes: [
       "id",
       "species",
-      "speciesDetail",
       "name",
       "etcDetail",
       "sex",
@@ -110,10 +109,37 @@ export async function getAll(species) {
       "thumbnail",
       "sponsor",
       "expired",
+      "expiredDesc",
+      "createdAt",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
-    where: species === "전체" ? "" : { species },
+    where: species === "전체" || species === "" ? "" : { species },
+  });
+}
+
+export async function getAllByUser(userId) {
+  return Post.findAll({
+    attributes: [
+      "id",
+      "species",
+      "name",
+      "etcDetail",
+      "sex",
+      "age",
+      "targetAmount",
+      "amount",
+      "adopt",
+      "purpose",
+      "thumbnail",
+      "sponsor",
+      "expired",
+      "expiredDesc",
+      "createdAt",
+    ],
+    order: [["createdAt", "DESC"]],
+    raw: true,
+    where: { userId },
   });
 }
 
@@ -125,7 +151,6 @@ export async function getById(id) {
 
 export async function create(
   species,
-  speciesDetail,
   etcDetail,
   sex,
   name,
@@ -139,7 +164,6 @@ export async function create(
 ) {
   return Post.create({
     species,
-    speciesDetail,
     etcDetail,
     sex,
     name,
@@ -156,7 +180,6 @@ export async function create(
 export async function update(
   id,
   species,
-  speciesDetail,
   etcDetail,
   sex,
   name,
@@ -168,7 +191,6 @@ export async function update(
 ) {
   return Post.findByPk(id).then((post) => {
     post.species = species;
-    post.speciesDetail = speciesDetail;
     post.etcDetail = etcDetail;
     post.sex = sex;
     post.name = name;
@@ -188,8 +210,20 @@ export async function remove(id) {
 }
 
 export async function updateSupport(id, amount) {
+  const updateSupportExpired = Post.findByPk(id).then((post) => {
+    post.expired = true;
+    post.expiredDesc = "amount";
+    return post.save();
+  });
   return Post.findByPk(id).then((post) => {
-    post.amount = post.amount + amount;
+    if (post.targetAmount === amount) {
+      updateSupportExpired;
+    }
+    if (post.targetAmount <= post.amount) {
+      updateSupportExpired;
+      throw new Error("목표 후원 금액을 달성했습니다.");
+    }
+    post.amount = amount;
     return post.save();
   });
 }
@@ -205,5 +239,21 @@ export async function updateSponsor(id, sponsor) {
   return Post.findByPk(id).then((post) => {
     post.sponsor = sponsor;
     return post.save();
+  });
+}
+
+export async function updateExpired() {
+  const notExpiredPosts = await getAll("");
+  const filtered = notExpiredPosts.filter((post) => post.expired === 0); // 만료가 되지 않았다면,
+  const today = dayjs();
+  filtered.map((post) => {
+    const postDate = dayjs(post.createdAt);
+    if (Math.abs(postDate.diff(today, "d")) > 13) {
+      return Post.findByPk(post.id).then((post) => {
+        post.expired = true;
+        post.expiredDesc = "date";
+        return post.save();
+      });
+    } else return;
   });
 }
