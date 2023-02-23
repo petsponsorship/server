@@ -3,11 +3,18 @@ import multerS3 from "multer-s3";
 import aws from "aws-sdk";
 import { config } from "../config.js";
 
-aws.Credentials({
-  accessKeyId: config.s3.accessKeyId,
-  secretAccessKey: config.s3.secretAccessKey,
+const creds = new aws.Credentials(config.s3.accessKeyId, config.s3.secretAccessKey);
+
+aws.config.update({
   region: config.s3.region,
+  credentials: creds,
 });
+
+// aws.Credentials({
+//   accessKeyId: config.s3.accessKeyId,
+//   secretAccessKey: config.s3.secretAccessKey,
+//   region: config.s3.region,
+// });
 
 const s3 = new aws.S3();
 
