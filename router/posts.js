@@ -17,6 +17,7 @@ router.get("/", postController.getPosts);
 router.get("/:id", postController.getPost);
 router.post("/", isAuth, validatePost, upload.single("thumbnail"), postController.createPost);
 router.put("/:id", isAuth, validatePost, postController.updatePost);
+router.put("/end/:id", isAuth, postController.endPost);
 router.delete("/:id", isAuth, postController.removePost);
 
 export default router;

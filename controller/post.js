@@ -12,10 +12,10 @@ export async function getPosts(req, res) {
     const posts = await postRepository.getAll(species);
     res.status(200).json(posts);
   }
-  postRepository.updateExpired();
 }
 
 export async function getPost(req, res) {
+  console.log("???");
   const id = req.params.id;
   const post = await postRepository.getById(id);
   const authHeader = req.get("Authorization");
@@ -51,8 +51,7 @@ export async function createPost(req, res) {
 export async function updatePost(req, res) {
   const id = req.params.id;
 
-  const { species, speciesDetail, etcDetail, sex, name, age, adopt, purpose, thumbnail, content } =
-    req.body;
+  const { species, etcDetail, sex, name, age, adopt, purpose, thumbnail, content } = req.body;
 
   const post = await postRepository.getById(id);
   if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
@@ -76,8 +75,25 @@ export async function updatePost(req, res) {
 export async function removePost(req, res) {
   const id = req.params.id;
   const post = await postRepository.getById(id);
+  const data = await supportRepository.getByPost(id);
+
   if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
   if (post.userId !== req.userId) return res.sendStatus(403);
-  await postRepository.remove(id);
-  res.sendStatus(204);
+
+  if (data.count === 0) {
+    await postRepository.remove(id);
+    res.sendStatus(204);
+  } else {
+    res.status(404).json({ message: `post id (${id}) 는 현재 후원자가 존재하는 글입니다.` });
+  }
+}
+
+export async function endPost(req, res) {
+  const id = req.params.id;
+  const post = await postRepository.getById(id);
+  if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
+  if (post.userId !== req.userId) return res.sendStatus(403);
+
+  const updated = await postRepository.updateExpiredEnd(id);
+  res.status(200).json(updated);
 }

@@ -269,7 +269,10 @@ export async function updateExpired() {
   });
 }
 
-function expiredAt() {
-  const today = dayjs();
-  return today.add(13, "day");
+export async function updateExpiredEnd(id) {
+  return Post.findByPk(id).then((post) => {
+    post.expired = true;
+    post.expiredDesc = "changedMind";
+    return post.save();
+  });
 }
