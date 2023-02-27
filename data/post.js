@@ -90,6 +90,15 @@ export const Post = sequelize.define("post", {
     allowNull: false,
     defaultValue: 0,
   },
+  expiredAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: () => {
+      const today = dayjs();
+      const expiredAt = today.add(13, "day");
+      return expiredAt.$d;
+    },
+  },
 });
 Post.belongsTo(User);
 
@@ -111,6 +120,7 @@ export async function getAll(species) {
       "expired",
       "expiredDesc",
       "createdAt",
+      "expiredAt",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
@@ -136,6 +146,7 @@ export async function getAllByUser(userId) {
       "expired",
       "expiredDesc",
       "createdAt",
+      "expiredAt",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
@@ -256,4 +267,9 @@ export async function updateExpired() {
       });
     } else return;
   });
+}
+
+function expiredAt() {
+  const today = dayjs();
+  return today.add(13, "day");
 }
