@@ -8,7 +8,6 @@ const AUTH_ERROR = { message: "Authentication Error" };
 export const isAuth = async (req, res, next) => {
   const authHeader = req.get("Authorization");
   const refreshToken = req.get("RefreshToken");
-  const accessToken = authHeader?.split(" ")[1];
 
   if (refreshToken) {
     if (!refreshToken.startsWith("Bearer ")) return res.status(401).json(AUTH_ERROR);
@@ -20,6 +19,7 @@ export const isAuth = async (req, res, next) => {
   }
 
   if (!refreshToken) {
+    const accessToken = authHeader?.split(" ")[1];
     if (!authHeader.startsWith("Bearer ")) return res.status(401).json(AUTH_ERROR);
     jwt.verify(accessToken, config.jwt.secretKey, async (error, decoded) => {
       if (error) return res.status(401).json(AUTH_ERROR);
