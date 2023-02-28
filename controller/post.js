@@ -97,3 +97,8 @@ export async function endPost(req, res) {
   const updated = await postRepository.updateExpiredEnd(id);
   res.status(200).json(updated);
 }
+
+export async function img(req, res) {
+  const img = req.file.location;
+  res.status(200).json({ imgUrl: img });
+}
