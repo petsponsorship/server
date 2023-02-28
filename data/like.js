@@ -1,7 +1,7 @@
 import { sequelize } from "../db/database.js";
 
 import SQ from "sequelize";
-import { Post, updateSupport } from "./post.js";
+import { Post } from "./post.js";
 import { User } from "./auth.js";
 const DataTypes = SQ.DataTypes;
 const Sequelize = SQ.Sequelize;

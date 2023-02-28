@@ -10,12 +10,6 @@ aws.config.update({
   credentials: creds,
 });
 
-// aws.Credentials({
-//   accessKeyId: config.s3.accessKeyId,
-//   secretAccessKey: config.s3.secretAccessKey,
-//   region: config.s3.region,
-// });
-
 const s3 = new aws.S3();
 
 export const upload = multer({
