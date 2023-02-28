@@ -19,7 +19,7 @@ export const isAuth = async (req, res, next) => {
   }
 
   if (!refreshToken) {
-    const accessToken = authHeader?.split(" ")[1];
+    const accessToken = authHeader.split(" ")[1];
     if (!authHeader.startsWith("Bearer ")) return res.status(401).json(AUTH_ERROR);
     jwt.verify(accessToken, config.jwt.secretKey, async (error, decoded) => {
       if (error) return res.status(401).json(AUTH_ERROR);
