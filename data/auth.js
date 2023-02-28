@@ -35,6 +35,10 @@ export const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  refreshToken: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 export async function findByEmail(email) {
@@ -61,4 +65,18 @@ export async function findByToken(authToken) {
     userId = decoded.id;
   });
   return userId;
+}
+
+export async function createRefreshToken(id, refreshToken) {
+  return User.findByPk(id).then((user) => {
+    user.refreshToken = refreshToken;
+    return user.save();
+  });
+}
+
+export async function findByRefreshToken(refreshToken) {
+  const vaildUser = User.findOne({
+    where: { refreshToken },
+  });
+  if (vaildUser) return findByToken(refreshToken);
 }

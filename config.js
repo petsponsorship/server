@@ -24,6 +24,8 @@ export const config = {
   jwt: {
     secretKey: required("JWT_SECRET_KEY"),
     saltRound: required("JWT_SALT"),
+    expiredDays: required("JWT_EXPIRED_DAYS"),
+    expiredHours: required("JWT_EXPIRED_HOURS"),
   },
   s3: {
     accessKeyId: required("AWS_ACCESS_KEY"),
