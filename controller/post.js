@@ -23,7 +23,7 @@ export async function getPost(req, res) {
     const supportByUser = await supportRepository.getByPostById(id, userId);
     const supportAmountByUser = (supportByUser && supportByUser.dataValues.amount) || 0;
     return res.status(200).json({ supportAmountByUser, post });
-  } else if (post) return res.status(200).json(post);
+  } else if (post) return res.status(200).json({ supportAmountByUser: 0, post });
   res.status(404).json({ message: `post id (${id}) not found` });
 }
 
