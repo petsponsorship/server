@@ -15,7 +15,6 @@ export async function getPosts(req, res) {
 }
 
 export async function getPost(req, res) {
-  console.log("???");
   const id = req.params.id;
   const post = await postRepository.getById(id);
   const authHeader = req.get("Authorization");
@@ -31,7 +30,7 @@ export async function getPost(req, res) {
 export async function createPost(req, res) {
   const { species, etcDetail, sex, name, age, targetAmount, adopt, purpose, content } = req.body;
   const userId = req.userId;
-  const thumbnail = req.file.location;
+  const thumbnail = req.file ? req.file.location : "";
   const posts = await postRepository.create(
     species,
     etcDetail,
@@ -99,6 +98,6 @@ export async function endPost(req, res) {
 }
 
 export async function img(req, res) {
-  const img = req.file.location;
+  const img = req.file ? req.file.location : "";
   res.status(200).json({ imgUrl: img });
 }
