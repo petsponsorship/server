@@ -72,7 +72,7 @@ export const Post = sequelize.define("post", {
     defaultValue: "",
   },
   content: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
     defaultValue: "",
   },
