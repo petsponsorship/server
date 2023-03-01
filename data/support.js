@@ -32,7 +32,6 @@ export async function getById(userId) {
       "amount",
       [Sequelize.col("post.id"), "postId"],
       [Sequelize.col("post.species"), "species"],
-      [Sequelize.col("post.speciesDetail"), "speciesDetail"],
       [Sequelize.col("post.name"), "name"],
       [Sequelize.col("post.etcDetail"), "etcDetail"],
       [Sequelize.col("post.sex"), "sex"],

@@ -221,17 +221,17 @@ export async function remove(id) {
 }
 
 export async function updateSupport(id, amount) {
-  const updateSupportExpired = Post.findByPk(id).then((post) => {
-    post.expired = true;
-    post.expiredDesc = "amount";
-    return post.save();
-  });
   return Post.findByPk(id).then((post) => {
     if (post.targetAmount === amount) {
-      updateSupportExpired;
+      post.amount = amount;
+      post.expired = true;
+      post.expiredDesc = "amount";
+      post.save();
     }
-    if (post.targetAmount <= post.amount) {
-      updateSupportExpired;
+    if (post.targetAmount < amount) {
+      post.expired = true;
+      post.expiredDesc = "amount";
+      post.save();
       throw new Error("목표 후원 금액을 달성했습니다.");
     }
     post.amount = amount;
