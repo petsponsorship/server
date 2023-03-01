@@ -1,4 +1,4 @@
-## 유기동 동물 후원 플랫폼
+# 유기 동물 후원 플랫폼
 
 <br/>
 
@@ -10,19 +10,13 @@
 
 ## 👩🏻‍🔧 팀원 정보
 
-<img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Back 문이슬-black"/> 
-<img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Front 조수진-black"/> 
-<img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Front 차혜인-black"/>
+<img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Back 문이슬-black"/> <img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Front 조수진-black"/> <img style="margin:5px; border: 1px solid white; border-radius: 20px" src="https://img.shields.io/badge/Front 차혜인-black"/>
 
 <br/>
 
-## ⚙️ 사용 기술
+## ⚙️ 사용 스택
 
-<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/javascript-yellow?style=flat-square&logo=javascript&logoColor=white"/>
-<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/Express-blue?style=flat-square&logo=Express&logoColor=white"/> 
-<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/MySQL-midnightblue?style=flat-square&logo=MySQL&logoColor=white"/>
-<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/Sequelize-orange?style=flat-square&logo=Sequelize&logoColor=white"/>
-<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/AWS-232f3e?style=flat-square&logo=amazon&logoColor=white"/>
+<img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/javascript-yellow?style=flat-square&logo=javascript&logoColor=white"/> <img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/Express-blue?style=flat-square&logo=Express&logoColor=white"/> <img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/MySQL-midnightblue?style=flat-square&logo=MySQL&logoColor=white"/> <img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/Sequelize-orange?style=flat-square&logo=Sequelize&logoColor=white"/> <img style="margin:5px; border: 2px solid white; border-radius: 20px" src="https://img.shields.io/badge/AWS-232f3e?style=flat-square&logo=amazon&logoColor=white"/>
 
 <br/>
 
