@@ -19,6 +19,7 @@ export const isAuth = async (req, res, next) => {
   }
 
   if (!refreshToken) {
+    if (!authHeader) return res.status(401).json({ message: "token 이 없습니다." });
     const accessToken = authHeader.split(" ")[1];
     if (!authHeader.startsWith("Bearer ")) return res.status(401).json(AUTH_ERROR);
     jwt.verify(accessToken, config.jwt.secretKey, async (error, decoded) => {

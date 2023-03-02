@@ -23,6 +23,7 @@ const vaildateSignup = [
 ];
 
 router.post("/login", validateCredential, authController.login);
+router.get("/logout", isAuth, authController.logout);
 router.post("/signup", vaildateSignup, authController.signup);
 router.get("/me", isAuth, authController.me);
 

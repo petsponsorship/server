@@ -18,7 +18,6 @@ export async function signup(req, res) {
   });
   const refreshToken = createJwtRefreshToken(userId.dataValues.id);
   const accessToken = createJwtAccessToken(userId.dataValues.id);
-  userRepository.createRefreshToken(userId, refreshToken);
   res.status(201).json({
     refreshToken: `Bearer ${refreshToken}`,
     accessToken: `Bearer ${accessToken}`,
@@ -48,13 +47,18 @@ export async function login(req, res) {
   });
 }
 
+export async function logout(req, res) {
+  const user = await userRepository.findById(req.userId);
+  if (!user) return res.status(404).json({ message: "유저를 찾을 수 없습니다." });
+  await userRepository.removeRefreshToken(req.userId);
+  res.status(200).json({ message: "로그아웃 되었습니다." });
+}
+
 export function createJwtAccessToken(id) {
-  // 유효 1시간 // test 3분
   return jwt.sign({ id }, secretKey, { expiresIn: config.jwt.expiredHours });
 }
 
 function createJwtRefreshToken(id) {
-  // 유효 14일
   return jwt.sign({ id }, secretKey, { expiresIn: config.jwt.expiredDays });
 }
 

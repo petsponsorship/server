@@ -69,3 +69,9 @@ export async function unlike(id) {
     like.destroy();
   });
 }
+
+export async function getByPostById(postId, userId) {
+  return Like.findOne({
+    where: { postId, userId },
+  });
+}

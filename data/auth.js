@@ -74,6 +74,13 @@ export async function createRefreshToken(id, refreshToken) {
   });
 }
 
+export async function removeRefreshToken(id) {
+  return User.findByPk(id).then((user) => {
+    user.refreshToken = "";
+    return user.save();
+  });
+}
+
 export async function findByRefreshToken(refreshToken) {
   const vaildUser = User.findOne({
     where: { refreshToken },
