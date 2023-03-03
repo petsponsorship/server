@@ -3,9 +3,8 @@ import * as supportRepository from "../data/support.js";
 
 export async function getSupport(req, res) {
   const userId = req.userId;
-  const support = await supportRepository.getById(userId);
-  const supportTotalAmount = support.reduce((sum, i) => sum + i.amount, 0);
-  res.status(200).json({ total: supportTotalAmount, supportList: support });
+  const supportList = await supportRepository.getById(userId);
+  res.status(200).json({ supportList });
 }
 
 export async function createSupport(req, res) {

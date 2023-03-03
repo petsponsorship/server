@@ -7,6 +7,7 @@ import postsRouter from "./router/posts.js";
 import authRouter from "./router/auth.js";
 import supportRouter from "./router/support.js";
 import likeRouter from "./router/like.js";
+import myRouter from "./router/my.js";
 import "express-async-errors";
 import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
@@ -30,6 +31,7 @@ app.use("/posts", postsRouter);
 app.use("/auth", authRouter);
 app.use("/support", supportRouter);
 app.use("/like", likeRouter);
+app.use("/my", myRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);
