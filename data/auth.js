@@ -61,7 +61,7 @@ export async function findByToken(authToken) {
   const token = authToken.split(" ")[1];
   let userId = "";
   jwt.verify(token, config.jwt.secretKey, async (error, decoded) => {
-    if (error) return res.status(401).json(AUTH_ERROR);
+    if (error) throw new Error(`token 이 유효하지 않습니다.`);
     userId = decoded.id;
   });
   return userId;
