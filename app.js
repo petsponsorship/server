@@ -26,6 +26,9 @@ app.use(cors(corsOption));
 app.use(morgan("tiny"));
 
 schedule.scheduleJob("1 1 0 * * *", () => updateExpired());
+// schedule.scheduleJob("5 * * * * *", () => console.log("!!!매 5초마다 실행"));
+// schedule.scheduleJob("5 * * * * *", () => updateExpired());
+// schedule.scheduleJob("1 1 0 * * *", () => updateExpired());
 
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);

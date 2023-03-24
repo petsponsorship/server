@@ -12,5 +12,6 @@ const validateSupport = [
 
 router.get("/", isAuth, supportController.getSupport);
 router.post("/", isAuth, validateSupport, supportController.createSupport);
+router.post("/extend", isAuth, supportController.extendSupport);
 
 export default router;

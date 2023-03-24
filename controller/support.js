@@ -1,4 +1,4 @@
-import { updateSponsor } from "../data/post.js";
+import { extendExpired, updateSponsor } from "../data/post.js";
 import * as supportRepository from "../data/support.js";
 
 export async function getSupport(req, res) {
@@ -15,6 +15,16 @@ export async function createSupport(req, res) {
     const supportNum = await supportRepository.getByPost(postId);
     await updateSponsor(postId, supportNum.rows.length);
     res.sendStatus(201);
+  } catch (error) {
+    res.status(404).json({ message: `${error}` });
+  }
+}
+
+export async function extendSupport(req, res) {
+  const { postId } = req.body;
+  try {
+    const post = await (await extendExpired(postId)).dataValues;
+    res.status(201).json(post);
   } catch (error) {
     res.status(404).json({ message: `${error}` });
   }

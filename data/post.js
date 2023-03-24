@@ -99,10 +99,36 @@ export const Post = sequelize.define("post", {
       return expiredAt.$d;
     },
   },
+  isExtend: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
 });
 Post.belongsTo(User);
 
-export async function getAll(species) {
+const Op = Sequelize.Op;
+
+export async function getAll(species = "전체", lastId) {
+  console.log("lastId :>> ", typeof lastId);
+
+  // const where = species === "전체" || species === "" ? "" : { species };
+  const where = {};
+  if (parseInt(lastId, 4)) {
+    where.id = { [Op.lt]: parseInt(lastId, 4) };
+  }
+
+  // const where = species === "전체" || species === "" ? "" : { species };
+
+  // if (parseInt(lastId, 3)) {
+
+  //     where.id: {
+  //       [Op.lt]: parseInt(lastId, 3),
+  //     },
+
+  //   // species === "전체" || species === "" ? "" : { species };
+  // }
+
   return Post.findAll({
     attributes: [
       "id",
@@ -121,12 +147,17 @@ export async function getAll(species) {
       "expiredDesc",
       "createdAt",
       "expiredAt",
+      "isExtend",
     ],
     order: [["createdAt", "DESC"]],
+    // limit: parseInt(lastId, 3),
+    limit: 4,
     raw: true,
-    where: species === "전체" || species === "" ? "" : { species },
+    where,
   });
 }
+// where: { [Op.lt]: parseInt(lastId, 4) },
+// where: species === "전체" || species === "" ? "" : { species },
 
 export async function getAllByUser(userId) {
   return Post.findAll({
@@ -147,6 +178,7 @@ export async function getAllByUser(userId) {
       "expiredDesc",
       "createdAt",
       "expiredAt",
+      "isExtend",
     ],
     order: [["createdAt", "DESC"]],
     raw: true,
@@ -259,6 +291,7 @@ export async function updateExpired() {
   const today = dayjs();
   filtered.map((post) => {
     const postDate = dayjs(post.createdAt);
+    const expiredAt = dayjs(post.expiredAt);
     if (Math.abs(postDate.diff(today, "d")) > 13) {
       return Post.findByPk(post.id).then((post) => {
         post.expired = true;
@@ -273,6 +306,17 @@ export async function updateExpiredEnd(id) {
   return Post.findByPk(id).then((post) => {
     post.expired = true;
     post.expiredDesc = "changedMind";
+    return post.save();
+  });
+}
+
+export async function extendExpired(id) {
+  const today = dayjs();
+  const expiredAt = today.add(13, "day");
+  return Post.findByPk(id).then((post) => {
+    if (post.isExtend) throw new Error("연장은 1회로 제한됩니다.");
+    post.expiredAt = expiredAt.$d;
+    post.isExtend = true;
     return post.save();
   });
 }

@@ -4,13 +4,15 @@ import * as supportRepository from "../data/support.js";
 import * as likeRepository from "../data/like.js";
 
 export async function getPosts(req, res) {
+  // postRepository.updateExpired();
   const species = req.query.species;
+  const lastId = req.query.lastId;
   const userId = req.query.user;
   if (userId) {
     const posts = await postRepository.getAllByUser(userId);
     res.status(200).json(posts);
   } else {
-    const posts = await postRepository.getAll(species);
+    const posts = await postRepository.getAll(species, lastId);
     res.status(200).json(posts);
   }
 }
