@@ -237,6 +237,7 @@ export async function update(
   thumbnail,
   content
 ) {
+  console.log(":::::::::: species :>> ", species);
   return Post.findByPk(id).then((post) => {
     post.species = species;
     post.etcDetail = etcDetail;

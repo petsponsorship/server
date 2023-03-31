@@ -33,9 +33,11 @@ export async function getPost(req, res) {
 }
 
 export async function createPost(req, res) {
-  const { species, etcDetail, sex, name, age, targetAmount, adopt, purpose, content } = req.body;
+  const { species, etcDetail, sex, name, age, neutered, targetAmount, adopt, purpose, content } =
+    req.body;
   const userId = req.userId;
   const thumbnail = req.file ? req.file.location : "";
+
   const posts = await postRepository.create(
     species,
     etcDetail,
@@ -54,29 +56,34 @@ export async function createPost(req, res) {
 }
 
 export async function updatePost(req, res) {
-  const id = req.params.id;
+  // const id = req.params.id;
 
-  const { species, etcDetail, sex, name, age, neutered, adopt, purpose, thumbnail, content } =
+  const { id, species, etcDetail, sex, name, age, neutered, adopt, purpose, thumbnail, content } =
     req.body;
+
+  console.log("req :>> ", req.body);
 
   const post = await postRepository.getById(id);
   if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
   if (post.userId !== req.userId) return res.sendStatus(403);
 
-  const updated = await postRepository.update(
-    id,
-    species,
-    etcDetail,
-    sex,
-    name,
-    age,
-    neutered,
-    adopt,
-    purpose,
-    thumbnail,
-    content
-  );
-  res.status(200).json(updated);
+  console.log("???????? species :>> ", species);
+
+  // const updated = await postRepository.update(
+  //   id,
+  //   species,
+  //   etcDetail,
+  //   sex,
+  //   name,
+  //   age,
+  //   neutered,
+  //   adopt,
+  //   purpose,
+  //   thumbnail,
+  //   content
+  // );
+  // res.status(200).json(updated);
+  // res.status(200);
 }
 
 export async function removePost(req, res) {
