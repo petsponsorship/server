@@ -110,13 +110,13 @@ Post.belongsTo(User);
 const Op = Sequelize.Op;
 
 export async function getAll(species = "전체", lastId) {
-  console.log("lastId :>> ", typeof lastId);
+  // console.log("lastId :>> ", typeof lastId);
 
   // const where = species === "전체" || species === "" ? "" : { species };
-  const where = {};
-  if (parseInt(lastId, 4)) {
-    where.id = { [Op.lt]: parseInt(lastId, 4) };
-  }
+  // const where = {};
+  // if (parseInt(lastId, 4)) {
+  //   where.id = { [Op.lt]: parseInt(lastId, 4) };
+  // }
 
   // const where = species === "전체" || species === "" ? "" : { species };
 
@@ -154,11 +154,11 @@ export async function getAll(species = "전체", lastId) {
     // limit: parseInt(lastId, 3),
     limit: 4,
     raw: true,
-    where,
+    // where,
+    where: species === "전체" || species === "" ? "" : { species },
   });
 }
 // where: { [Op.lt]: parseInt(lastId, 4) },
-// where: species === "전체" || species === "" ? "" : { species },
 
 export async function getAllByUser(userId) {
   return Post.findAll({
