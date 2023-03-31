@@ -42,6 +42,7 @@ export async function createPost(req, res) {
     sex,
     name,
     age,
+    neutered,
     targetAmount,
     adopt,
     purpose,
@@ -55,7 +56,8 @@ export async function createPost(req, res) {
 export async function updatePost(req, res) {
   const id = req.params.id;
 
-  const { species, etcDetail, sex, name, age, adopt, purpose, thumbnail, content } = req.body;
+  const { species, etcDetail, sex, name, age, neutered, adopt, purpose, thumbnail, content } =
+    req.body;
 
   const post = await postRepository.getById(id);
   if (!post) return res.status(404).json({ message: `post id (${id}) not found` });
@@ -68,6 +70,7 @@ export async function updatePost(req, res) {
     sex,
     name,
     age,
+    neutered,
     adopt,
     purpose,
     thumbnail,

@@ -137,6 +137,7 @@ export async function getAll(species = "전체", lastId) {
       "etcDetail",
       "sex",
       "age",
+      "neutered",
       "targetAmount",
       "amount",
       "adopt",
@@ -168,6 +169,7 @@ export async function getAllByUser(userId) {
       "etcDetail",
       "sex",
       "age",
+      "neutered",
       "targetAmount",
       "amount",
       "adopt",
@@ -198,6 +200,7 @@ export async function create(
   sex,
   name,
   age,
+  neutered,
   targetAmount,
   adopt,
   purpose,
@@ -211,6 +214,7 @@ export async function create(
     sex,
     name,
     age,
+    neutered,
     targetAmount,
     adopt,
     purpose,
@@ -227,6 +231,7 @@ export async function update(
   sex,
   name,
   age,
+  neutered,
   adopt,
   purpose,
   thumbnail,
@@ -238,6 +243,7 @@ export async function update(
     post.sex = sex;
     post.name = name;
     post.age = age;
+    post.neutered = neutered;
     post.adopt = adopt;
     post.purpose = purpose;
     post.thumbnail = thumbnail;
