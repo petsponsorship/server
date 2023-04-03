@@ -8,8 +8,8 @@ const router = express.Router();
 
 router.get("/", postController.getPosts);
 router.get("/:id", postController.getPost);
-// router.post("/edit", isAuth, validator, postController.updateTest);
-router.post("/", isAuth, validator, upload.single("thumbnail"), postController.createPost);
+router.post("/", isAuth, validator, postController.createPost);
+router.put("/:id", isAuth, validator, postController.updatePost);
 router.put("/end/:id", isAuth, postController.endPost);
 router.post("/img", isAuth, upload.single("img"), postController.img);
 router.delete("/:id", isAuth, postController.removePost);

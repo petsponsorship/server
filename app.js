@@ -4,11 +4,11 @@ import morgan from "morgan";
 import helmet from "helmet";
 import schedule from "node-schedule";
 import postsRouter from "./router/posts.js";
-import editRouter from "./router/edit.js";
 import authRouter from "./router/auth.js";
 import supportRouter from "./router/support.js";
 import likeRouter from "./router/like.js";
 import myRouter from "./router/my.js";
+import messageRouter from "./router/message.js";
 import "express-async-errors";
 import { sequelize } from "./db/database.js";
 import { config } from "./config.js";
@@ -31,12 +31,12 @@ schedule.scheduleJob("1 1 0 * * *", () => updateExpired());
 // schedule.scheduleJob("5 * * * * *", () => updateExpired());
 // schedule.scheduleJob("1 1 0 * * *", () => updateExpired());
 
-app.use("/edit", editRouter);
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);
 app.use("/support", supportRouter);
 app.use("/like", likeRouter);
 app.use("/my", myRouter);
+app.use("/message", messageRouter);
 
 app.use((req, res, next) => {
   res.sendStatus(404);
